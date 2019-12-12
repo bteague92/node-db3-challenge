@@ -29,15 +29,32 @@ function add(scheme) {
         .insert(scheme)
         .then(ids => {
             const [id] = ids;
+            return findById(id).first()
+        })
+}
+
+function update(changes, id) {
+    return db('schemes')
+        .update(changes)
+        .where({ id })
+        .then(count => {
             return findById(id)
         })
 }
 
-function update(id, changes) {
-    return db('schemes').where({ id }).update(changes)
-}
-
 function remove(id) {
-    return db('schemes').where({ id }).del()
+    return db('schemes')
+        .where({ id })
+        .then(scheme => {
+            if (!scheme[0]) {
+                return null
+            } else {
+                return db('schemes')
+                    .where({ id })
+                    .del()
+                    .then(() => {
+                        return scheme[0];
+                    })
+            }
+        })
 }
-

@@ -1,7 +1,5 @@
 const express = require('express');
-
 const Schemes = require('./scheme-model.js');
-
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -16,7 +14,6 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-
   Schemes.findById(id)
     .then(scheme => {
       if (scheme) {
@@ -32,7 +29,6 @@ router.get('/:id', (req, res) => {
 
 router.get('/:id/steps', (req, res) => {
   const { id } = req.params;
-
   Schemes.findSteps(id)
     .then(steps => {
       if (steps.length) {
@@ -48,14 +44,9 @@ router.get('/:id/steps', (req, res) => {
 
 router.post('/', (req, res) => {
   const schemeData = req.body;
-
   Schemes.add(schemeData)
     .then(scheme => {
-      if (schemeData) {
-        res.status(201).json(scheme);
-      } else {
-        res.status(404).json({ message: "please enter scheme" })
-      }
+      res.status(201).json(scheme);
     })
     .catch(err => {
       res.status(500).json({ message: 'Failed to create new scheme' });
@@ -65,7 +56,6 @@ router.post('/', (req, res) => {
 router.post('/:id/steps', (req, res) => {
   const stepData = req.body;
   const { id } = req.params;
-
   Schemes.findById(id)
     .then(scheme => {
       if (scheme) {
@@ -85,7 +75,6 @@ router.post('/:id/steps', (req, res) => {
 router.put('/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
-
   Schemes.findById(id)
     .then(scheme => {
       if (scheme) {
@@ -108,7 +97,7 @@ router.delete('/:id', (req, res) => {
   Schemes.remove(id)
     .then(deleted => {
       if (deleted) {
-        res.json({ removed: deleted });
+        res.json(deleted);
       } else {
         res.status(404).json({ message: 'Could not find scheme with given id' });
       }
